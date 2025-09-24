@@ -7,10 +7,6 @@ const debug = false;
 const cpm = 92/8;
 
 setcpm(cpm);
-"1@24 2@104".pickRestart([
-  "c - - - -".gain(0).superimpose(x=>{setcpm(500); return x.add(2);}),
-  "c".gain(0).superimpose(x=>{setcpm(92/8); return x.add(2);})
-]);
 
 // Debug purposes (easier to liste multiple times a music section in the middle of many loops)
 const fastForward = (wantedCPM, cyclesToSkip, skipSpeed, offset = 1.25) => {
@@ -39,7 +35,7 @@ const as = register('as', (mapping, pat) => {
 
 const melody = n("<-4 -3 -2 -3> 0 2@1.5 0@0.5 [3 2] [1 0] [1 2] <0 [4 2]>");
 
-stack(
+const song = stack(
   // Banjo
   melody
     .sound("gm_banjo")
@@ -116,4 +112,13 @@ stack(
     .gain(0.6)
     .mask("<0@24 1@104>")
     ._pianoroll()
-).room(0.8)
+).room(0.8);
+
+stack(
+  // Hack: manual preloading (avoid JIT loading of samples)
+  song.gain(0).fast(32).mask("<1 0@1000>"),
+  
+  // Play the actual song
+  song
+);
+
