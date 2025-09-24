@@ -1,0 +1,54 @@
+/*
+@title Kingdom Hearths II - Dearly Beloved
+@by Yoko Shimomura (strudelised by Nitorac)
+@license CC BY-NC-SA
+*/
+const debug = false;
+setcpm(15);
+
+// Debug purposes (easier to liste multiple times a music section in the middle of many loops)
+const fastForward = (wantedCPM, cyclesToSkip, skipSpeed, offset = 1.25) => {
+  if(cyclesToSkip <= 0) {
+    setcpm(wantedCPM);
+  }
+  setcpm(wantedCPM * skipSpeed);
+  setTimeout(() => setcpm(wantedCPM), (cyclesToSkip - offset) * 60000 / (wantedCPM * skipSpeed));
+};
+
+if(debug) {
+  fastForward(
+    cpm,
+    24,
+    18,
+  );
+}
+
+
+const mScale = (x, octava = 3) => x.scale('Eb'.concat(octava, ':major'));
+
+$: mScale(n("5, -18"), 5)
+  .sound("gm_string_ensemble_1")
+  .room(1.0)
+  .gain(0.3);
+
+$: mScale(n("5 2 1 -1 -2"), 3)
+  .superimpose(x => x.transpose(12))
+  .gain(.4)
+  .room(1.0)
+  .sound("gm_orchestral_harp");
+
+_$: mScale(n("0 6 5"), 3)
+  .room(1.0)
+  .attack(0.7)
+  .clip(1.05)
+  .sound("gm_cello");
+
+// $: n("5@2 7@1.5 4@0.5").scale("Eb5:major").sound("gm_violin").gain(.2).room(1.5).mask("<0 1@256>");
+// $: chord("Ab Bb Eb Bb").anchor("g4").voicing().sound("gm_string_ensemble_1").gain(.3).room(1.5).mask("<0 1@256>");
+// $: n("[5 2 1 6]!2 [7 6 9 8] [7 6 5 4]")
+//     .scale("Eb4:major")
+//     .off(2.85/64, x => x)
+//     .sound("gm_flute")
+//     .gain(0.8)
+//     .room("<1.0 1.5@256>");
+
