@@ -116,7 +116,7 @@ const song = stack(
 
 stack(
   // Hack: manual preloading (avoid JIT loading of samples)
-  song.gain(0).fast(32).mask("<1 0@1000>"),
+  song.gain(0).fast(32).mask("<1 0@100000>"),
   
   // Play the actual song
   song
