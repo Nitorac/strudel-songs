@@ -1,0 +1,51 @@
+/*
+@title Outer Wilds - Timber Hearth
+@by Andrew Prahlow (strudelised by Nitorac)
+@license CC BY-NC-SA
+*/
+
+const songScale = register('songScale', (octava, pat) => pat.scale('Eb' + octava + ':major'));
+
+const createEmptyParts = (obj) => {
+  return {
+    intro1: n("<~>"),
+    intro2: n("<~>"),
+    intro3: n("<~>"),
+    dev1: n("<~>"),
+    ...obj
+  };
+};
+
+const song = `<intro1@10 intro2@8 intro3@18 dev1@48>`;
+//const song = "<dev1@24>";
+
+guitar_solo: song.pickRestart(createEmptyParts({
+  intro1: n("<-11@2 [3 2] [1 0] [-2 -1] [0 -1] [2 0] [-1 2] [0 -1] -3>").songScale(4),
+  intro2: n("<-3@2 [[0 1] 2] [1 0] [1 2] [1 0] -4@2>").songScale(3),
+  intro3: n("<[1 0] [-2 -3] [-6 -5] [-3 -5] [0 -3] [-5 0] [-3 -5] [-5,~@0.1 -1,~@0.2 1]@1.5 [-9,~@0.05 -5,~@0.1 0]@3.5 [-10,~@0.05 -6,~@0.1 -1]@3 [-10,~@0.05 -5,~@0.1 -3]@2.75 [-11,~@0.1 -7]@0.25>").songScale(4),
+  dev1: n("<[-11,-7,-4,-2]@3 ~@50000>").songScale(4)
+}))
+  .clip(1.2).release(0.9)
+  .s("gm_acoustic_guitar_steel:7")
+  //.s("gm_acoustic_guitar_steel:2")
+  .gain(0.7)
+
+guitar_banjo: song.pickRestart(createEmptyParts({
+  dev1: "<loop1@12 loop2@12>".pickRestart({
+    loop1: n("<[-4 3] [0 4] [3 0]>").songScale(4),
+    loop2: n("<[-7 0] [-3 1] [0 -3]>").songScale(4)
+  })
+}))
+  .clip(1.2).release(1.5)
+  .s("gm_banjo:0")
+  .pan(0)
+  .off(1/32,x=>x.s("gm_acoustic_guitar_steel:3").pan(1))
+  .room(1.1)
+  .gain(0.8)
+
+console.log('window timeout ' + window.cpmTimeout);
+clearInterval(window.cpmTimeout);
+setcpm(110);
+window.cpmTimeout = setTimeout(() => setcpm(95), (10 + 8 + 18) / 110 * 60 * 1000);
+//setcpm(95);
+
